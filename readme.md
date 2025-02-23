@@ -41,7 +41,7 @@ pip install ngrok
 pip install pyngrok
 
 # Autenticar tu cuenta (si es la primera vez)
-ngrok authtoken 2tHf7LujcFcuw2NvV85pxxvRGSe_xNGCcpuoMQ8GdT6aah3t
+ngrok authtoken <tu-token>
 
 # habilitar CORS en Flak
 pip install flask-cors
