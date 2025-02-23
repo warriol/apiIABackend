@@ -32,6 +32,8 @@ def chat():
     data = request.json
     question = data.get("question", "")
 
+    """
+    # Respuesta: ERROR: The prompt size exceeds the context window size and cannot be processed.
     # Generar el embedding de la consulta
     query_embedding = np.array([model.encode(question)])
 
@@ -41,15 +43,17 @@ def chat():
     # Obtener los textos más relevantes
     relevant_texts = [texts[i] for i in indices[0]]
 
-    # Limitar el número de textos o fragmentarlos en partes más pequeñas
-    relevant_texts = relevant_texts[0]  # Limitar a 2 textos, por ejemplo.
-
     # Combinar los textos relevantes en un solo string para pasarlo al modelo GPT
     combined_text = " ".join(relevant_texts)
 
     # Hacer la consulta al modelo GPT, usando los textos relevantes como contexto
     with gpt.chat_session():
         response = gpt.generate(f"Pregunta: {question}\nContexto: {combined_text}\nRespuesta:")
+    """
+
+    # Hacer la consulta al modelo GPT, sin contexto
+    with gpt.chat_session():
+        response = gpt.generate(f"Pregunta: {question}\nRespuesta:")
 
     return jsonify({"response": response})
 
