@@ -23,12 +23,8 @@ source .venv/bin/activate
 
 # Instala Flask y GPT4All
 pip install flask gpt4all
-
-# Instalar dependencias
-pip install -r requirements.txt
-
-# Guardar dependencias en caso de nuevas instalaciones
-pip freeze > requirements.txt
+pip install sentence-transformers
+pip install faiss-cpu
 ```
 
 ### 2️⃣ conectar back con front - exponer back
@@ -50,5 +46,13 @@ pip install flask-cors
 CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # Configurar puerto 5000 (inicia la aplicacion)
-ngrok http 5000
+ngrok http --url=deciding-rested-badger.ngrok-free.app 127.0.0.1:5000
+```
+### 3️⃣ Freezing Your Requirements
+```sh
+# Instalar dependencias
+pip install -r requirements.txt
+
+# Guardar dependencias en caso de nuevas instalaciones
+pip freeze > requirements.txt
 ```

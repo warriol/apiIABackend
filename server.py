@@ -4,7 +4,7 @@ from flask import Flask, request, jsonify
 from gpt4all import GPT4All
 from flask_cors import CORS
 import json
-import numpy as np
+# import numpy as np
 import faiss
 from sentence_transformers import SentenceTransformer
 
@@ -30,7 +30,10 @@ gpt = GPT4All("mistral-7b-instruct-v0.1.Q4_0.gguf", model_path="./models")
 @app.route('/chat', methods=['POST'])
 def chat():
     data = request.json
-    question = data.get("question", "")
+    question = data.get("question", "").strip()
+
+    if not question:
+        return jsonify({"response": "Por favor, ingresa una pregunta."}), 400
 
     """
     # Respuesta: ERROR: The prompt size exceeds the context window size and cannot be processed.
@@ -52,10 +55,27 @@ def chat():
     """
 
     # Hacer la consulta al modelo GPT, sin contexto
-    with gpt.chat_session():
-        response = gpt.generate(f"Pregunta: {question}\nRespuesta:")
+    try:
+        response_text = ""
+        
+        with gpt.chat_session() as chat:
+            with gpt.chat_session() as chat:
+                response = chat.generate(
+                    f"Pregunta: {question}\nRespuesta:",
+                    max_tokens=512,  # Evita cortes en la respuesta
+                    temp=0.7,  # Controla la creatividad de la respuesta
+                    top_p=0.9,  # Ajuste para mejorar la diversidad
+                    repeat_penalty=1.1,  # Evita respuestas repetitivas
+                    n_predict=512  # Número máximo de tokens a predecir
+                )
 
-    return jsonify({"response": response})
+        print(f"Respuesta completa: {response}")  # Verifica si el modelo ya la está cortando
+
+        return jsonify({"response": response})
+
+    except Exception as e:
+        print(f"Error en la generación: {str(e)}")
+        return jsonify({"response": "Error en el procesamiento"}), 500
 
 @app.route('/')
 def hello_world():  # put application's code here
