@@ -1,6 +1,6 @@
 # ngrok http 5000
 # ngrok http --url=deciding-rested-badger.ngrok-free.app 127.0.0.1:5000
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
 from gpt4all import GPT4All
 from flask_cors import CORS
 import json
@@ -57,21 +57,24 @@ def chat():
     # Hacer la consulta al modelo GPT, sin contexto
     try:
         response_text = ""
-        
-        with gpt.chat_session() as chat:
+
+        def generate_response():
             with gpt.chat_session() as chat:
-                response = chat.generate(
+                for chunk in chat.generate(
                     f"Pregunta: {question}\nRespuesta:",
-                    max_tokens=512,  # Evita cortes en la respuesta
-                    temp=0.7,  # Controla la creatividad de la respuesta
-                    top_p=0.9,  # Ajuste para mejorar la diversidad
-                    repeat_penalty=1.1,  # Evita respuestas repetitivas
-                    n_predict=512  # Número máximo de tokens a predecir
-                )
+                    max_tokens=512,
+                    temp=0.7,
+                    top_p=0.9,
+                    repeat_penalty=1.1,
+                    n_predict=512,
+                    streaming=True  # Activa el modo streaming
+                ):  # response_text += chunk  # Construye la respuesta en tiempo real
 
-        print(f"Respuesta completa: {response}")  # Verifica si el modelo ya la está cortando
+                    yield chunk  # Enviar solo texto sin JSON
 
-        return jsonify({"response": response})
+        return Response(generate_response(), content_type='text/plain')
+
+        # return jsonify({"response": response_text}), 200
 
     except Exception as e:
         print(f"Error en la generación: {str(e)}")
