@@ -1,4 +1,4 @@
-/models/mistral-7b-instruct-v0.1.Q4_0.gguf
+/models/
 /.venv/
 /.idea/
 __pycache__

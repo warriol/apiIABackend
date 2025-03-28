@@ -1,4 +1,3 @@
-# ngrok http 5000
 # ngrok http --url=deciding-rested-badger.ngrok-free.app 127.0.0.1:5000
 from flask import Flask, request, jsonify, Response
 from gpt4all import GPT4All
