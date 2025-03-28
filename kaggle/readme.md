@@ -1,3 +1,13 @@
+## Instalar CUDA
+https://developer.nvidia.com/cuda-downloads?target_os=Windows&target_arch=x86_64&target_version=11&target_type=exe_local
+
+## Instalar torch para GPU
+pip uninstall torch
+pip install torch --index-url https://download.pytorch.org/whl/cu121
+
+
+pip install 'accelerate>=0.26.0'
+
 ## Descargar el modelo de Kaggle
 
 - Descargar el modelo Gemma 3 de Kaggle:
