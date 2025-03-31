@@ -1,0 +1,6 @@
+/models/
+/.venv/
+/.idea/
+__pycache__
+gemma3/gemma3
+/.env
