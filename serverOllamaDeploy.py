@@ -1,3 +1,4 @@
+import os
 import requests
 from flask import Flask, request, jsonify, Response
 from flask_cors import CORS
@@ -6,6 +7,18 @@ app = Flask(__name__)
 CORS(app)
 
 OLLAMA_API_URL = "http://localhost:11434/api/generate"
+MODEL_NAME = "gemma3:4b"
+
+def download_model(model_name):
+    response = requests.post(f"{OLLAMA_API_URL}/pull", json={"model": model_name})
+    if response.status_code == 200:
+        print(f"Modelo {model_name} descargado exitosamente.")
+    else:
+        print(f"Error al descargar el modelo {model_name}: {response.text}")
+
+@app.before_first_request
+def setup():
+    download_model(MODEL_NAME)
 
 @app.route('/chat', methods=['POST'])
 def chat():
@@ -18,7 +31,6 @@ def chat():
 
     print(f"Llegó una pregunta: {question}")
 
-    # Definir el contexto del modelo como un abogado experto en derecho penal uruguayo
     promptL = (
         "Eres un abogado experto en derecho penal uruguayo. "
         "Responde siempre en español, utilizando un lenguaje técnico pero claro. "
@@ -30,20 +42,15 @@ def chat():
     promptO = (
         "Eres un profesor de lengua española con excelente ortografía y gramática. "
         "Revisarás el texto que se te envíe y harás las correcciones necesarias. "
-        "Al comienzo de cada párrafo, verifica que hayan 5 espacios. "
-        "Entre un párrafo y el siguiente, debe haber un interlineado. "
-        "Si se encuentran pasajes textuales, se espera que se indique con comillas el comienzo y el final, y la cita textual irá escrita en mayúsculas. "
-        "Presentarás como respuesta el texto corregido y al final una lista de faltas ortográficas encontradas y su corrección; además de otras correcciones que hayas hecho. "
+        "Presentarás como respuesta el texto corregido y al final una lista de faltas encontradas y su corrección. "
         f"Texto del usuario: {question}"
     )
 
-    # Seleccionar el prompt según el rol
     prompt = promptL if role == "leyes" else promptO
 
-    # Enviar pregunta a la API de Ollama
     try:
         payload = {
-            "model": "gemma3:4b",
+            "model": MODEL_NAME,
             "prompt": prompt,
             "stream": True,
             "max_tokens": 512
