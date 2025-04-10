@@ -25,6 +25,7 @@ source .venv/bin/activate
 pip install flask gpt4all
 pip install sentence-transformers
 pip install faiss-cpu
+pip install pandas numpy
 ```
 
 ### 2️⃣ conectar back con front - exponer back
