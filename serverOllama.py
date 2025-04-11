@@ -36,7 +36,7 @@ def chat():
             - Si hay texto entre comillas indica que es un pasaje textual, se espera que no hagas correcciones orográficas o gramaticales de los pasajes textuales, pero si el mismo esta escrito en minúsculas debes cambiar el texto del pasaje textual a mayúsculas.
             - Presentarás como respuesta el texto corregido y al final una lista con las correcciones que hayas realizado.
             Texto del usuario: {question}"""
-    elif role == "sgsp"
+    elif role == "sgsp":
         context = "\n".join(
             f"{row['Contexto']}: {row['Response']}" for  _, row in train_data.iterrows()
         )
