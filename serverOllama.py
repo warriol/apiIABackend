@@ -43,6 +43,7 @@ def chat():
         prompt = (
             "Eres un experto en el Sistema de Gestión de Seguridad Pública (SGSP). "
             "Responde siempre en español, utilizando un lenguaje técnico pero claro. "
+            "Si recibes un soludo como pregunta, responde con un saludo y un resumen de tus capaciodades. "
             "Utiliza el siguiente contexto para responder las preguntas del usuario:\n"
             f"{context}\n"
             f"Pregunta del usuario: {question}"
