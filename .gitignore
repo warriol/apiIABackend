@@ -4,3 +4,4 @@
 __pycache__
 gemma3/gemma3
 /.env
+/pdfs/
